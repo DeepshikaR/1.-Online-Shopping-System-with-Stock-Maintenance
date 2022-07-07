@@ -1,0 +1,186 @@
+<html>
+<head>
+<link rel="stylesheet" href="style.css"> 
+<?php
+	function addCart_qty($c,$id){
+				$host="localhost";
+				$user="root";
+				$password="";
+				$db="IteProject";
+				$connect=mysqli_connect($host,$user,$password,$db);
+				if($connect==false){
+        				die("ERROR cannot connect".mysqli_connect_error());
+				}
+    			$sql="SELECT quantity FROM CART WHERE category=".$c." AND itemNo=".$id;
+   			if($result=mysqli_query($connect,$sql)){
+					if(mysqli_num_rows($result)>0){
+								$row=mysqli_fetch_array($result);
+								$qty=$row["quantity"];
+								if($qty<4){
+									$qty+=1;
+									$sql="UPDATE CART
+											SET quantity=".$qty." WHERE category=".$c." AND itemNo=".$id;
+									if(!mysqli_query($connect,$sql)){
+											die("Error".mysqli_error($connect));									
+									}									
+									
+									
+								}
+					}
+					   				
+   							
+   			}
+   			else {
+					die("ERROR".mysqli_error($connect));   			
+   			}
+			mysqli_close($connect);
+			
+			
+			return "added qty";
+	}
+	function minusCart_qty($c,$id){
+			$host="localhost";
+				$user="root";
+				$password="";
+				$db="IteProject";
+				$connect=mysqli_connect($host,$user,$password,$db);
+				if($connect==false){
+        				die("ERROR cannot connect".mysqli_connect_error());
+				}
+    			$sql="SELECT quantity FROM CART WHERE category=".$c." AND itemNo=".$id;
+   			if($result=mysqli_query($connect,$sql)){
+					if(mysqli_num_rows($result)>0){
+								$row=mysqli_fetch_array($result);
+								$qty=$row["quantity"];
+								if($qty>1){
+									$qty-=1;
+									$sql="UPDATE CART
+											SET quantity=".$qty." WHERE category=".$c." AND itemNo=".$id;
+									if(!mysqli_query($connect,$sql)){
+											die("Error".mysqli_error($connect));									
+									}									
+									
+									
+								}
+					}
+					   				
+   							
+   			}
+   			else {
+					die("ERROR".mysqli_error($connect));   			
+   			}
+			mysqli_close($connect);
+	
+			return "minus qty";	
+				
+	
+	}
+	function removeItem($c,$id){
+			$host="localhost";
+				$user="root";
+				$password="";
+				$db="IteProject";
+				$connect=mysqli_connect($host,$user,$password,$db);
+				if($connect==false){
+        				die("ERROR cannot connect".mysqli_connect_error());
+				}
+			
+			
+			
+			return "remove item";	
+	}
+
+?>
+
+</head>
+<body>
+<?php require("header_2.php")?>
+<div class="cart_body bor">
+	<div class="cart_items bor">
+		<?php
+				$host="localhost";
+				$user="root";
+				$password="";
+				$db="IteProject";
+				$connect=mysqli_connect($host,$user,$password,$db);
+				if($connect==false){
+        				die("ERROR cannot connect".mysqli_connect_error());
+				}
+    			$sql="SELECT * FROM CART ";
+   			if($result=mysqli_query($connect,$sql)){
+							$category=array();			
+							$itmNo=array();				
+							$no_of_items=mysqli_num_rows($result);	
+							echo "<script>console.log(".$no_of_items.")</script>";						
+							echo "<form method='post'>";							
+							for($i=0;$i<$no_of_items;$i++){				
+								$sql="SELECT * FROM CART WHERE itemNo=".$i;									
+									if($result=mysqli_query($connect,$sql)){
+											$row=mysqli_fetch_array($result);	
+												$img=$row["itemImage"];
+												$c=$row["category"];
+												$category[$i]=$c;
+												$itmNo[$i]=$row["itemNo"];
+												echo"<div class='cart_item bor'>
+													<div class='cart_img bor' style='background-image:url("."./images/items/category_".$c."/".$img.")'>
+
+													</div>
+													<div class='cart_details bor'>";
+													echo $row["itemName"]."<br>".$row["itemPrice"];
+													echo "</div>
+													<div class='cart_qty bor'>
+														<div class='bor qty qty-'>
+            											<button class='button qty_button img_minus' name='cart-_".$c."_".$row["itemNo"]."'></button>
+            										</div>
+            										<div class='bor qty qty1'>";
+            									echo $row["quantity"];	
+            									echo "</div>
+            										<div class='bor qty qty_plus'>
+            										<button class='button qty_button img_plus' name='cart+_".$c."_".$row["itemNo"]."'></button>
+            										</div>													
+													</div>
+													<div class='cart_remove bor'>
+													<button class='button img_remove_cart' onclick='removeItem(".$c.",".$row["itemNo"].")'></button>
+													</div>
+				
+													</div>";
+									}
+									else{
+										die("Error".mysqli_error($connect));									
+									}
+							}
+							echo "</form>";
+				}
+				else{
+					die("Error".mysqli_);				
+				}
+				mysqli_close($connect);			
+		?>
+		<script type="text/javascript" >
+			var width=5;				
+			var item=document.getElementsByClassName("cart_item");
+         for(var i=0;i<item.length;i++){
+            	   item[i].style.top=(width)+"px";
+                  width+=130;
+         }
+		</script>
+		<?php
+			for($i=0;$i<$no_of_items;$i++){
+				if(isset($_POST["cart+_".$c."_".$row["itemNo"]])){
+							addCart_qty($category[$i],$itmNo[$i]);		
+							header("Location: ./cart.php");					
+				}
+				if(isset($_POST["cart-_".$c."_".$row["itemNo"]])){
+							minusCart_qty($category[$i],$itmNo[$i]);	
+							header("Location: ./cart.php");								
+				}				
+			}			
+		
+		?>
+	</div>
+	<div class="produce_to_payment bor">
+		
+	</div>
+</div>
+</body>
+</html>

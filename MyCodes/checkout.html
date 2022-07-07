@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<?php session_start(); ?>
+<html>
+<head>
+<title>Check Out</title>
+<style>
+table{border:2px solid grey; padding: 5px;}
+th{text-align:left}
+</style>
+<link rel="stylesheet" href="style.css"> 
+</head>
+
+<body>
+<?php require("header_2.php"); 
+ echo "Total= ".$_SESSION["TOTAL"]; ?>
+<div class="bor header" style="height:25px">
+ <h4>Add a card</h4>
+</div>
+<h4>Add card information</h4>
+<form method="post" name="ccd" onsubmit="pay.php" >
+ <table>
+   <tr> <th>Name on card:</th>
+        <th>Card Number:</th>
+        <th>Expiration date:</th></tr>
+   <tr> <td><input type="text" name="name"></td>
+        <td><input type="int" name="ccn"></td>
+        <td><input type="date" name="expd"></td></tr>
+  </table><br>
+  <input type="submit" value="Pay">
+</form>
+
+</body>
+</html>

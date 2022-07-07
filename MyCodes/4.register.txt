@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<?php session_start(); ?>
+<html><head>
+<?php
+ $_SESSION["USN"]=$_POST["usn"];
+ $_SESSION["PASS"]=$_POST["pass"];
+   
+ $link=mysqli_connect("localhost","root","");
+ if($link==false)
+   die("Error".mysqli_connect_error());
+
+ $link->query("CREATE DATABASE ITE_project");
+ if(!mysqli_select_db($link,"ITE_project")){ die("error");}
+
+ $create="CREATE TABLE IF NOT EXISTS user( Name varchar(20), Username varchar(20), Password varchar(20), Address varchar(40), Email varchar(30), Phone int, Id int AUTO_INCREMENT PRIMARY KEY)";
+ if(!mysqli_query($link,$create)){echo"fail". mysqli_error($link);}
+ 
+ $query="INSERT INTO user(Name,Username,Password,Address,Email, Phone) values("."'".$_POST["name"]."'".","."'".$_POST["usn"]."'".","."'".$_POST["pass"]."'".","."'".$_POST["ad"]."'".","."'".$_POST["em"]."'".",".$_POST["tel"].")";
+ if(mysqli_query($link,$query))
+    { echo "Record added";
+      $_SESSION["ID"]= mysqli_insert_id($link); }
+  else
+    { echo "Error:".mysqli_error($link);}
+ 
+ mysqli_close($link);
+?>
+</head>
+
+</html>

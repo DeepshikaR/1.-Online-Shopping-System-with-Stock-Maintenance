@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<?php session_start(); ?>
+<html>
+<body>
+<?php 
+ $x=0;
+ 
+ $db="ITE_project";
+ $connect= mysqli_connect("localhost","root","");
+ if($connect==false)
+   {die("ERROR cannot connect".mysqli_connect_error()); }
+ if(!mysqli_select_db($connect,$db))
+   {die("error");}   
+ 
+ $sql="SELECT Username, Password, Id FROM user where Username=".$_POST["usn"];
+ 
+ if($result=mysqli_query($connect,$sql))
+ { if(mysqli_num_rows($result)>0)
+   { while($row=mysqli_fetch_array($result))
+       if($row["Password"]==$_POST["pass"])
+          {$GLOBALS['x']=1;
+           $_SESSION["USN"]=$_POST["usn"];
+           $_SESSION["PASS"]=$_POST["pass"];
+           $_SESSION["ID"]=$row["Id"];} } } 
+ 
+ if($GLOBALS['x']==0)
+ { echo '<script type="text/javascript">
+     alert("The given user is not registered. Register to proceed or check login details");
+     document.form1.pass.focus();
+     return false; </script>'; }
+ else
+ { echo '<script type="text/javascript">
+      return true;</script>'; }
+ 
+ mysqli_close($connect);
+?>
+
+</body>
+</html>
+
+  
+ 
+       

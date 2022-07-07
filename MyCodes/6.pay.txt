@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<?php session_start(); ?>
+<html>
+<head>
+<link rel="stylesheet" href="style.css"> 
+</head>
+
+<body>
+<?php
+ require("header_2.php");
+ $host="localhost";
+ $user="root";
+ $password="";
+ $db="ITE_project";
+ $total=$_SESSION["TOTAL"];
+ $id=$_SESSION["ID"];
+ $date= date('d-m-y h:i:s');
+
+ $connect=mysqli_connect($host,$user,$password);
+ if($connect==false)
+  {die("ERROR cannot connect".mysqli_connect_error());}
+ if(!mysqli_select_db($connect,$db))
+  {die("error");}   
+
+ $create="CREATE TABLE IF NOT EXISTS preord(Id int, Date datetime,itemName varchar(50), quantity int)";
+ if(!mysqli_query($connect,$create))
+  {echo"fail". mysqli_error($connect);}
+
+ $sql="SELECT * FROM CART";
+ if($result=mysqli_query($connect,$sql))
+  { if(mysqli_num_rows($result)>0) 
+     { while($row=mysqli_fetch_array($result))
+        { $q=$row["quantity"];
+          $query="INSERT INTO preord values(".$id.", "."'".$date."'".", "."'".$row["itemName"]."'".", ".$q.")";
+          if(!mysqli_query($connect,$querry))
+             {echo"fail". mysqli_error($connect);}
+        }
+     }
+  }
+  
+ $sql="DELETE FROM CART";
+ if(!mysqli_query($connect,$create))
+  {echo"fail". mysqli_error($connect);}
+
+
+ mysqli_close($connect);
+?>
+
+<div style="width:920px; left:10px; position:absolute; top:150px; z-index:1">
+<center> 
+  <h3>Thank You for Shopping with Us!</h3>
+  <br><br><br><br>
+  <a href="home.html">Return home</a>
+</center>
+
+</body>
+</html>

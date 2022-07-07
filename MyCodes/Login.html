@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="stylesheet" href="style.css">
+<style>
+table{border:2px solid grey; padding: 5px;}
+</style>
+</head>
+
+<body>
+<center><h1>WELCOME</h1></center>
+<div class="header bor">
+    <p>Hi</p></div> 	//Name of website to be inserted 
+
+<div style="width:920px; left:10px; position:absolute; top:150px; z-index:1">
+<center> 
+  <h3>Registered User</h3>
+  <form action=" homePage" onsubmit="validate.php" name="form1" method="post">
+  <table>
+   <tr> <th>Username:</th>
+        <td><input type="text" name="usn"></td></tr>
+   <tr> <th>Password:</th>
+        <td><input type="password" name="pass"></td></tr>
+   </table><br>
+   <input type="submit" value="Login">
+   </form>
+   
+   <br>
+   <h3>New User?</h3>
+   <button type="button" onclick="document.location='reg.html'">Register Here</button> 
+
+</center>
+</body></html> 
